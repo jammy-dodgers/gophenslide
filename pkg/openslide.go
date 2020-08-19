@@ -46,6 +46,13 @@ func (slide Slide) LargestLevelDimensions() (int64, int64) {
 	return int64(a), int64(b)
 }
 
+// LevelDimensions Get the dimensions of a level.
+func (slide Slide) LevelDimensions(level int32) (int64, int64) {
+	var a, b C.int64_t
+	C.openslide_get_level_dimensions(slide.ptr, level, &a, &b)
+	return int64(a), int64(b)
+}
+
 // DetectVendor Quickly determine whether a whole slide image is recognized.
 func DetectVendor(filename string) (string, error) {
 	cFilename := C.CString(filename)
