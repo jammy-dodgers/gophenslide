@@ -6,17 +6,18 @@ package openslide
 // #include <stdlib.h>
 // #include <openslide.h>
 import "C"
-import "unsafe"
+import (
+	"errors"
+	"unsafe"
+)
 
-// DetectVendor
-func DetectVendor(filename string) string {
-	c_filename := C.CString(filename)
-	defer C.free(unsafe.Pointer(c_filename))
-	slide_vendor := C.openslide_detect_vendor(c_filename)
-	if slide_vendor == nil {
-		return ""
-	} else {
-		defer C.free(unsafe.Pointer(slide_vendor))
-		return C.GoString(slide_vendor)
+// DetectVendor Quickly determine whether a whole slide image is recognized.
+func DetectVendor(filename string) (string, error) {
+	cFilename := C.CString(filename)
+	defer C.free(unsafe.Pointer(cFilename))
+	slideVendor := C.openslide_detect_vendor(cFilename)
+	if slideVendor == nil {
+		return "", errors.New("No vendor for " + filename)
 	}
+	return C.GoString(slideVendor), nil
 }
