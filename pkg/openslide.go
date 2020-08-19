@@ -53,6 +53,16 @@ func (slide Slide) LevelDimensions(level int32) (int64, int64) {
 	return int64(a), int64(b)
 }
 
+// LevelDownsample Get the downsampling factor of the given level
+func (slide Slide) LevelDownsample(level int32) float64 {
+	return float64(C.openslide_get_level_downsample(slide.ptr, C.int32_t(level)))
+}
+
+// BestLevelForDownsample Get the best level to use for a particular downsampling factor
+func (slide Slide) BestLevelForDownsample(downsample float64) int32 {
+	return int32(C.openslide_get_best_level_for_downsample(slide.ptr, C.double(downsample)))
+}
+
 // DetectVendor Quickly determine whether a whole slide image is recognized.
 func DetectVendor(filename string) (string, error) {
 	cFilename := C.CString(filename)
