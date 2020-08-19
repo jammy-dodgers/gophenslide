@@ -4,6 +4,7 @@ package openslide
 // #cgo LDFLAGS: -lopenslide
 // #include <stdio.h>
 // #include <stdlib.h>
+// #include <stdint.h>
 // #include <openslide.h>
 import "C"
 import (
@@ -13,7 +14,7 @@ import (
 
 // Slide Slides
 type Slide struct {
-	slidePtr *C.openslide_t
+	ptr *C.openslide_t
 }
 
 // Open Don't forget to defer Close.
@@ -30,12 +31,19 @@ func Open(filename string) (Slide, error) {
 
 // Close Closes a slide
 func Close(slide Slide) {
-	C.openslide_close(slide.slidePtr)
+	C.openslide_close(slide.ptr)
 }
 
 // LevelCount Get the number of levels in the whole slide image.
 func (slide Slide) LevelCount() int32 {
-	return int32(C.openslide_get_level_count(slide.slidePtr))
+	return int32(C.openslide_get_level_count(slide.ptr))
+}
+
+// LargestLevelDimensions Get the dimensions of level 0, the largest level (aka get_level0_dimensions)
+func (slide Slide) LargestLevelDimensions() (int64, int64) {
+	var a, b C.int64_t
+	C.openslide_get_level0_dimensions(slide.ptr, &a, &b)
+	return int64(a), int64(b)
 }
 
 // DetectVendor Quickly determine whether a whole slide image is recognized.
