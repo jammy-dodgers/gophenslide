@@ -52,7 +52,10 @@ func TestReadRegion(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to load image: ", err.Error())
 	}
-	bytes := slide.ReadRegion(10, 10, 6, 400, 400)
+	bytes, err := slide.ReadRegion(10, 10, 6, 400, 400)
+	if err != nil {
+		t.Fatal(err.Error())
+	}
 	const testRawFilename = "testdata/raw_region.data"
 	if info, e := os.Stat(testRawFilename); os.IsExist(e) && !info.IsDir() {
 		if remErr := os.Remove(testRawFilename); remErr != nil {

@@ -64,12 +64,15 @@ func (slide Slide) BestLevelForDownsample(downsample float64) int32 {
 }
 
 // ReadRegion read a region of the image as raw ARGB data
-func (slide Slide) ReadRegion(x, y int64, level int32, w, h int64) []byte {
+func (slide Slide) ReadRegion(x, y int64, level int32, w, h int64) ([]byte, error) {
 	len := w * h * 4
 	rawPtr := C.malloc(C.size_t(len))
 	defer C.free(rawPtr)
 	C.openslide_read_region(slide.ptr, (*C.uint32_t)(rawPtr), C.int64_t(x), C.int64_t(y), C.int32_t(level), C.int64_t(w), C.int64_t(h))
-	return C.GoBytes(rawPtr, C.int(len))
+	if txt := C.openslide_get_error(slide.ptr); txt != nil {
+		return nil, errors.New(C.GoString(txt))
+	}
+	return C.GoBytes(rawPtr, C.int(len)), nil
 }
 
 // DetectVendor Quickly determine whether a whole slide image is recognized.
