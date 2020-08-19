@@ -1,5 +1,5 @@
 # gophenslide
-Go binding for [Openslide](https://openslide.org/)
+Go binding for [OpenSlide](https://openslide.org/)
 
 # Building
 
