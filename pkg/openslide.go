@@ -12,7 +12,9 @@ import (
 )
 
 // Slide Slides
-type Slide *C.openslide_t
+type Slide struct {
+	slidePtr *C.openslide_t
+}
 
 // Open Don't forget to defer Close.
 // This is an expensive operation, you will want to cache the result.
@@ -21,14 +23,19 @@ func Open(filename string) (Slide, error) {
 	defer C.free(unsafe.Pointer(cFilename))
 	slideData := C.openslide_open(cFilename)
 	if slideData == nil {
-		return nil, errors.New("File " + filename + " unrecognized.")
+		return Slide{nil}, errors.New("File " + filename + " unrecognized.")
 	}
-	return slideData, nil
+	return Slide{slideData}, nil
 }
 
 // Close Closes a slide
 func Close(slide Slide) {
-	C.openslide_close(slide)
+	C.openslide_close(slide.slidePtr)
+}
+
+// LevelCount Get the number of levels in the whole slide image.
+func (slide Slide) LevelCount() int32 {
+	return int32(C.openslide_get_level_count(slide.slidePtr))
 }
 
 // DetectVendor Quickly determine whether a whole slide image is recognized.
