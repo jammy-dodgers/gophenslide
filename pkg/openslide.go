@@ -49,7 +49,7 @@ func (slide Slide) LargestLevelDimensions() (int64, int64) {
 // LevelDimensions Get the dimensions of a level.
 func (slide Slide) LevelDimensions(level int32) (int64, int64) {
 	var a, b C.int64_t
-	C.openslide_get_level_dimensions(slide.ptr, level, &a, &b)
+	C.openslide_get_level_dimensions(slide.ptr, C.int32_t(level), &a, &b)
 	return int64(a), int64(b)
 }
 
