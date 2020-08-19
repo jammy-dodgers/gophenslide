@@ -11,6 +11,26 @@ import (
 	"unsafe"
 )
 
+// Slide Slides
+type Slide *C.openslide_t
+
+// Open Don't forget to defer Close.
+// This is an expensive operation, you will want to cache the result.
+func Open(filename string) (Slide, error) {
+	cFilename := C.CString(filename)
+	defer C.free(unsafe.Pointer(cFilename))
+	slideData := C.openslide_open(cFilename)
+	if slideData == nil {
+		return nil, errors.New("File " + filename + " unrecognized.")
+	}
+	return slideData, nil
+}
+
+// Close Closes a slide
+func Close(slide Slide) {
+	C.openslide_close(slide)
+}
+
 // DetectVendor Quickly determine whether a whole slide image is recognized.
 func DetectVendor(filename string) (string, error) {
 	cFilename := C.CString(filename)
