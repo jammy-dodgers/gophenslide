@@ -1,2 +1,2 @@
 # gophenslide
-go openslide
+Go binding for [Openslide](https://openslide.org/)
