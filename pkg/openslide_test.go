@@ -1,6 +1,10 @@
 package openslide
 
-import "testing"
+import (
+	"io/ioutil"
+	"os"
+	"testing"
+)
 
 const testTiff = "testdata/CMU-1.tiff"
 
@@ -40,4 +44,23 @@ func TestLevels(t *testing.T) {
 	}
 	// TODO: make sure these values are actually correct
 	// (i don't yet have a program to examine my test files)
+}
+
+func TestReadRegion(t *testing.T) {
+	slide, err := Open(testTiff)
+	defer Close(slide)
+	if err != nil {
+		t.Error("Failed to load image: ", err.Error())
+	}
+	bytes := slide.ReadRegion(10, 10, 6, 400, 400)
+	const testRawFilename = "testdata/raw_region.data"
+	if info, e := os.Stat(testRawFilename); os.IsExist(e) && !info.IsDir() {
+		if remErr := os.Remove(testRawFilename); remErr != nil {
+			t.Log("Could not remove file ", testRawFilename)
+		}
+	}
+	writeErr := ioutil.WriteFile(testRawFilename, bytes, 0660)
+	if writeErr != nil {
+		t.Fatal(writeErr.Error())
+	}
 }
