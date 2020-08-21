@@ -79,3 +79,7 @@ func TestProperties(t *testing.T) {
 		t.Log(props[i], "=", slide.PropertyValue(props[i]))
 	}
 }
+
+func TestVersion(t *testing.T) {
+	t.Log("Version", OpenslideVersion())
+}
