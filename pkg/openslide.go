@@ -106,6 +106,7 @@ func (slide Slide) PropertyValue(propName string) string {
 	return C.GoString(cPropValue)
 }
 
+// OpenslideVersion Get the current version of Openslide as a string
 func OpenslideVersion() string {
 	cVer := C.openslide_get_version()
 	return C.GoString(cVer)
