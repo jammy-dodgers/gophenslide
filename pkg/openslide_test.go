@@ -67,3 +67,15 @@ func TestReadRegion(t *testing.T) {
 		t.Fatal(writeErr.Error())
 	}
 }
+
+func TestPropNames(t *testing.T) {
+	slide, err := Open(testTiff)
+	defer Close(slide)
+	if err != nil {
+		t.Error("Failed to load image: ", err.Error())
+	}
+	props := slide.PropertyNames()
+	for i := 0; i < len(props); i++ {
+		t.Log(props[i])
+	}
+}

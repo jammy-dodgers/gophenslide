@@ -6,6 +6,7 @@ package openslide
 // #include <stdlib.h>
 // #include <stdint.h>
 // #include <openslide.h>
+// char * str_at(char ** p, int i) { return p[i]; }
 import "C"
 import (
 	"errors"
@@ -84,6 +85,16 @@ func DetectVendor(filename string) (string, error) {
 		return "", errors.New("No vendor for " + filename)
 	}
 	return C.GoString(slideVendor), nil
+}
+
+// PropertyNames Get all property names available for this slide
+func (slide Slide) PropertyNames() []string {
+	cPropNames := C.openslide_get_property_names(slide.ptr)
+	strings := []string{}
+	for i := 0; C.str_at(cPropNames, C.int(i)) != nil; i++ {
+		strings = append(strings, C.GoString(C.str_at(cPropNames, C.int(i))))
+	}
+	return strings
 }
 
 // PropBackgroundColor The name of the property containing a slide's background color, if any.
