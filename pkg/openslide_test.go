@@ -81,5 +81,5 @@ func TestProperties(t *testing.T) {
 }
 
 func TestVersion(t *testing.T) {
-	t.Log("Version", OpenslideVersion())
+	t.Log("Version", Version())
 }
