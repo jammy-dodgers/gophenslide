@@ -68,7 +68,7 @@ func TestReadRegion(t *testing.T) {
 	}
 }
 
-func TestPropNames(t *testing.T) {
+func TestProperties(t *testing.T) {
 	slide, err := Open(testTiff)
 	defer Close(slide)
 	if err != nil {
@@ -76,6 +76,6 @@ func TestPropNames(t *testing.T) {
 	}
 	props := slide.PropertyNames()
 	for i := 0; i < len(props); i++ {
-		t.Log(props[i])
+		t.Log(props[i], "=", slide.PropertyValue(props[i]))
 	}
 }

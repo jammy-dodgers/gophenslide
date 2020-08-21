@@ -97,6 +97,15 @@ func (slide Slide) PropertyNames() []string {
 	return strings
 }
 
+// PropertyValue Get the value for a specific property
+func (slide Slide) PropertyValue(propName string) string {
+
+	cPropName := C.CString(propName)
+	defer C.free(unsafe.Pointer(cPropName))
+	cPropValue := C.openslide_get_property_value(slide.ptr, cPropName)
+	return C.GoString(cPropValue)
+}
+
 // PropBackgroundColor The name of the property containing a slide's background color, if any.
 //It is represented as an RGB hex triplet.
 const PropBackgroundColor = "openslide.background-color"
