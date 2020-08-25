@@ -20,7 +20,7 @@ func TestDetectVendor(t *testing.T) {
 
 func TestOpen(t *testing.T) {
 	slide, err := Open(testTiff)
-	defer Close(slide)
+	defer slide.Close()
 	if err != nil {
 		t.Error("Failed to load image: ", err.Error())
 	}
@@ -28,7 +28,7 @@ func TestOpen(t *testing.T) {
 
 func TestLevels(t *testing.T) {
 	slide, err := Open(testTiff)
-	defer Close(slide)
+	defer slide.Close()
 	if err != nil {
 		t.Error("Failed to load image: ", err.Error())
 	}
@@ -48,7 +48,7 @@ func TestLevels(t *testing.T) {
 
 func TestReadRegion(t *testing.T) {
 	slide, err := Open(testTiff)
-	defer Close(slide)
+	defer slide.Close()
 	if err != nil {
 		t.Error("Failed to load image: ", err.Error())
 	}
@@ -70,7 +70,7 @@ func TestReadRegion(t *testing.T) {
 
 func TestProperties(t *testing.T) {
 	slide, err := Open(testTiff)
-	defer Close(slide)
+	defer slide.Close()
 	if err != nil {
 		t.Error("Failed to load image: ", err.Error())
 	}

@@ -31,7 +31,7 @@ func Open(filename string) (Slide, error) {
 }
 
 // Close Closes a slide
-func Close(slide Slide) {
+func (slide Slide) Close() {
 	C.openslide_close(slide.ptr)
 }
 
